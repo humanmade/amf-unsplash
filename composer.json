@@ -1,7 +1,16 @@
 {
 	"name": "humanmade/amf-unsplash",
 	"description": "Bring Unsplash directly into your WordPress media library.",
+	"type": "wordpress-plugin",
+	"license": "GPL-2.0-or-later",
+	"authors": [
+		{
+			"name": "Human Made",
+			"homepage": "https://humanmade.com/"
+		}
+	],
 	"require": {
+		"php": ">=7.2",
 		"humanmade/asset-manager-framework": "~0.6"
 	}
 }
