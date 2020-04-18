@@ -1,0 +1,7 @@
+{
+	"name": "humanmade/amf-unsplash",
+	"description": "Bring Unsplash directly into your WordPress media library.",
+	"require": {
+		"humanmade/asset-manager-framework": "~0.6"
+	}
+}
