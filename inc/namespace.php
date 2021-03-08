@@ -8,7 +8,7 @@ use WP_Scripts;
  * Bootstrap function.
  */
 function bootstrap() : void {
-	add_filter( 'amf/provider_class', __NAMESPACE__ . '\\get_provider' );
+	add_filter( 'amf/provider', __NAMESPACE__ . '\\get_provider' );
 	add_action( 'amf/inserted_attachment', __NAMESPACE__ . '\\track_download', 10, 3 );
 	add_action( 'wp_default_scripts', __NAMESPACE__ . '\\override_per_page', 100 );
 	add_action( 'plugins_loaded', __NAMESPACE__ . '\\register_key_setting' );
@@ -18,12 +18,12 @@ function bootstrap() : void {
 /**
  * Get the provider for AMF.
  *
- * @return string
+ * @return Provider
  */
-function get_provider() : string {
+function get_provider() : Provider {
 	require_once __DIR__ . '/class-provider.php';
 
-	return Provider::class;
+	return new Provider();
 }
 
 /**
