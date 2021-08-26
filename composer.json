@@ -11,6 +11,6 @@
 	],
 	"require": {
 		"php": ">=7.2",
-		"humanmade/asset-manager-framework": "~0.6"
+		"humanmade/asset-manager-framework": "^0.12"
 	}
 }
