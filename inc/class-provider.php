@@ -3,15 +3,35 @@
 namespace AMFUnsplash;
 
 use AssetManagerFramework\Image;
+use AssetManagerFramework\Interfaces\Resize;
 use AssetManagerFramework\MediaList;
 use AssetManagerFramework\Provider as BaseProvider;
 use stdClass;
+use WP_Post;
 
-class Provider extends BaseProvider {
+class Provider extends BaseProvider implements Resize {
 	/**
 	 * Base URL for the Unsplash API.
 	 */
 	const BASE_URL = 'https://api.unsplash.com';
+
+	/**
+	 * Return the provider ID.
+	 *
+	 * @return string
+	 */
+	public function get_id() : string {
+		return 'unsplash';
+	}
+
+	/**
+	 * Return the provider name.
+	 *
+	 * @return string
+	 */
+	public function get_name() : string {
+		return __( 'Unsplash', 'amf-unsplash' );
+	}
 
 	/**
 	 * Parse input query args into an Unsplash query.
@@ -307,5 +327,34 @@ class Provider extends BaseProvider {
 		static::fetch( $endpoint, [], [
 			'blocking' => false,
 		] );
+	}
+
+	/**
+	 * Support dynamically sized images.
+	 *
+	 * @param WP_Post $attachment The current unsplash attachment.
+	 * @param integer $width Target width.
+	 * @param integer $height Target height.
+	 * @param boolean $crop Whether to crop the image or not.
+	 * @return string
+	 */
+	public function resize( WP_Post $attachment, int $width, int $height, $crop = false ) : string {
+		$base_url = wp_get_attachment_url( $attachment->ID );
+
+		$query_args = [
+			'w' => $width,
+			'h' => $height,
+			'fit' => $crop ? 'crop' : 'clip',
+			'crop' => 'faces,focalpoint',
+		];
+
+		if ( is_array( $crop ) ) {
+			$crop = array_filter( $crop, function ( $value ) {
+				return $value !== 'center';
+			} );
+			$query_args['crop'] = implode( ',', $crop );
+		}
+
+		return add_query_args( urlencode_deep( $query_args ), $base_url );
 	}
 }

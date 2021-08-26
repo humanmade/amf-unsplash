@@ -2,13 +2,14 @@
 
 namespace AMFUnsplash;
 
+use AssetManagerFramework\ProviderRegistry;
 use WP_Scripts;
 
 /**
  * Bootstrap function.
  */
 function bootstrap() : void {
-	add_filter( 'amf/provider_class', __NAMESPACE__ . '\\get_provider' );
+	add_action( 'amf/register_providers', __NAMESPACE__ . '\\register_provider' );
 	add_action( 'amf/inserted_attachment', __NAMESPACE__ . '\\track_download', 10, 3 );
 	add_action( 'wp_default_scripts', __NAMESPACE__ . '\\override_per_page', 100 );
 	add_action( 'plugins_loaded', __NAMESPACE__ . '\\register_key_setting' );
@@ -16,14 +17,13 @@ function bootstrap() : void {
 }
 
 /**
- * Get the provider for AMF.
+ * Register the provider for AMF.
  *
- * @return string
+ * @return void
  */
-function get_provider() : string {
+function register_provider( ProviderRegistry $provider_registry ) {
 	require_once __DIR__ . '/class-provider.php';
-
-	return Provider::class;
+	$provider_registry->register( new Provider() );
 }
 
 /**
