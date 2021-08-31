@@ -355,6 +355,6 @@ class Provider extends BaseProvider implements Resize {
 			$query_args['crop'] = implode( ',', $crop );
 		}
 
-		return add_query_args( urlencode_deep( $query_args ), $base_url );
+		return add_query_arg( urlencode_deep( $query_args ), $base_url );
 	}
 }
