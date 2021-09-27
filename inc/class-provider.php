@@ -5,6 +5,7 @@ namespace AMFUnsplash;
 use AssetManagerFramework\Image;
 use AssetManagerFramework\Interfaces\Resize;
 use AssetManagerFramework\MediaList;
+use AssetManagerFramework\MediaResponse;
 use AssetManagerFramework\Provider as BaseProvider;
 use stdClass;
 use WP_Post;
@@ -74,9 +75,9 @@ class Provider extends BaseProvider implements Resize {
 	 * Retrieve the images for a query.
 	 *
 	 * @param array $args Query args from the media library
-	 * @return MediaList Found images.
+	 * @return MediaResponse Found images.
 	 */
-	protected function request( array $args ) : MediaList {
+	protected function request( array $args ) : MediaResponse {
 		if ( ! empty( $args['s'] ) ) {
 			return $this->search_images( $args );
 		} else {
@@ -88,24 +89,28 @@ class Provider extends BaseProvider implements Resize {
 	 * Retrieve the images for a list query.
 	 *
 	 * @param array $args Query args from the media library
-	 * @return MediaList Found images.
+	 * @return MediaResponse Found images.
 	 */
-	protected function request_images( array $args ) : MediaList {
+	protected function request_images( array $args ) : MediaResponse {
 		$query = $this->parse_args( $args );
 
 		$response = $this->fetch( '/photos', $query );
 		$items = $this->prepare_images( $response['data'] );
 
-		return new MediaList( ...$items );
+		return new MediaResponse(
+			new MediaList( ...$items ),
+			$response['headers']['x-total'],
+			$response['headers']['x-per-page']
+		);
 	}
 
 	/**
 	 * Retrieve the images for a search query.
 	 *
 	 * @param array $args Query args from the media library
-	 * @return MediaList Found images.
+	 * @return MediaResponse Found images.
 	 */
-	protected function search_images( array $args ) : MediaList {
+	protected function search_images( array $args ) : MediaResponse {
 		$query = $this->parse_args( $args );
 
 		$response = $this->fetch( '/search/photos', $query );
@@ -128,7 +133,11 @@ class Provider extends BaseProvider implements Resize {
 			$items[] = $item;
 		}
 
-		return new MediaList( ...$items );
+		return new MediaResponse(
+			new MediaList( ...$items ),
+			$response['headers']['x-total'],
+			$response['headers']['x-per-page']
+		);
 	}
 
 	/**
