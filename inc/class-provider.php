@@ -216,6 +216,9 @@ class Provider extends BaseProvider implements Resize {
 		);
 		$item->set_description( $description );
 		$item->set_caption( $description );
+		$item->set_meta([
+		    'unsplash_id' => $image->id
+		]);
 
 		// Generate sizes.
 		$sizes = $this->get_image_sizes( $image );
