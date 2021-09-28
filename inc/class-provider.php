@@ -236,7 +236,7 @@ class Provider extends BaseProvider implements Resize {
 		// Add additional metadata for later.
 		$item->add_amf_meta( 'unsplash_id', $image->id );
 
-		return $item;
+		return apply_filters( 'amf/unsplash/image_repsonse_data', $item );
 	}
 
 	/**
