@@ -9,9 +9,6 @@ AMF Unsplash uses the [Asset Manager Framework](https://github.com/humanmade/ass
 
 All the interesting functionality is provided by [AMF](https://github.com/humanmade/asset-manager-framework), and this plugin essentially acts as a demo of how to implement the framework.
 
-*Note:* Currently, AMF Unsplash will *replace* your local media library. This is a limitation of AMF that we're working on fixing.
-
-
 ## Installation
 
 Install via Composer:
